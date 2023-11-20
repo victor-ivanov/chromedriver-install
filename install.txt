@@ -1,0 +1,32 @@
+# Install Zip/Unzip
+RUN apt-get update && apt-get install -y unzip zip
+
+# Install Chrome
+apt-get update && apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    hicolor-icon-theme \
+    libcanberra-gtk* \
+    libgl1-mesa-dri \
+    libgl1-mesa-glx \
+    libpango1.0-0 \
+    libpulse0 \
+    libv4l-0 \
+    libnss3 \ 
+    fonts-symbola \
+    jq \ 
+    --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/*
+
+curl https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json \
+    | jq -r '.channels.Stable.downloads|.chrome[],.chromedriver[]|select(.platform=="linux64")|.url|"curl --location --remote-name \(.)"' \
+    | bash \ 
+    && unzip -d /opt/chrome 'chrome-linux64.zip' \
+    && ln -s /opt/chrome/chrome-linux64/chrome /usr/bin/chrome \
+    && unzip -d /opt/chromedriver 'chromedriver-linux64.zip' \
+    && ln -s /opt/chromedriver/chromedriver-linux64/chromedriver /usr/bin/chromedriver \
+    && rm 'chrome-linux64.zip' && rm 'chromedriver-linux64.zip'
+
+echo "Chrome version: $(chrome --version) \nChromedriver version: $(chromedriver --version) "
