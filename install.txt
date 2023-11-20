@@ -1,5 +1,5 @@
 # Install Zip/Unzip
-RUN apt-get update && apt-get install -y unzip zip
+apt-get update && apt-get install -y unzip zip
 
 # Install Chrome
 apt-get update && apt-get install -y \
